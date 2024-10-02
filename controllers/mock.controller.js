@@ -1,5 +1,5 @@
+import ValidateComponent from "../components/index.js";
 import connectDB from "../config/db.js";
-import valildateLogicAditional from "../components/index.js";
 
 const getData = async (req, res) => {
   const path = req.path.substring(1);
@@ -11,7 +11,7 @@ const getData = async (req, res) => {
     const document = await collection.findOne({ path: path });
 
     if (document) {
-      const result = valildateLogicAditional(path, document.response);
+      const result = ValidateComponent(path, document.response);
       res.json(result);
     } else {
       res.status(404).json({ error: "Ruta no encontrada" });

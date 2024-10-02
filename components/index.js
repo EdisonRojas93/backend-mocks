@@ -1,6 +1,6 @@
 import { logic } from "./sign.js";
 
-const valildateLogicAditional = (path, response) => {
+const ValidateComponent = (path, response) => {
   console.log("entro", path, response);
 
   if (path == "api/v1/prueba") {
@@ -10,4 +10,4 @@ const valildateLogicAditional = (path, response) => {
   return response;
 };
 
-export default valildateLogicAditional;
+export default ValidateComponent;
