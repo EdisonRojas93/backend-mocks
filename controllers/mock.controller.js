@@ -1,4 +1,5 @@
 import connectDB from "../config/db.js";
+import valildateLogicAditional from "../components/index.js";
 
 const getData = async (req, res) => {
   const path = req.path.substring(1);
@@ -7,10 +8,11 @@ const getData = async (req, res) => {
     const db = await connectDB();
     const collection = db.collection("endpoints");
 
-    const document = await collection.findOne({ "path": path });
+    const document = await collection.findOne({ path: path });
 
     if (document) {
-      res.json(document.response);
+      const result = valildateLogicAditional(path, document.response);
+      res.json(result);
     } else {
       res.status(404).json({ error: "Ruta no encontrada" });
     }
