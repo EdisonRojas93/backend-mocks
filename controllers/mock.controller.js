@@ -3,7 +3,8 @@ import connectDB from "../config/db.js";
 
 const getData = async (req, res) => {
   const path = req.originalUrl.substring(1);
-  const newPath = GenerateUrl(path, req);
+  const newPath = await GenerateUrl(path, req);
+  console.log(newPath)
   try {
     const db = await connectDB();
     const collection = db.collection("endpoints");
