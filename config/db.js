@@ -11,7 +11,6 @@ async function connectDB() {
       useUnifiedTopology: true,
     });
     await client.connect();
-    console.log("Conectado a MongoDB");
   }
   return client.db("mocks");
 }

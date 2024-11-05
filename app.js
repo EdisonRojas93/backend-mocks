@@ -14,5 +14,5 @@ app.use(cors());
 app.use("/", routes);
 
 app.listen(port, () => {
-  console.log(`API corriendo en http://localhost:${port}`);
+  //console.log(`API corriendo en http://localhost:${port}`);
 });
