@@ -1,6 +1,6 @@
 import { logic } from "./sign.js";
 import { generateToken } from "./login.js";
-import { validateStep, saveStep, saveUploadState, validateUploadState} from './onboarding.js'
+import { validateStep, saveStep, saveUploadState, validateUploadState, saveSignStep, validateSignStep} from './onboarding.js'
 
 const ValidateComponent = (path, response) => {
 
@@ -35,7 +35,7 @@ const GenerateUrl = async (path, req) =>{
   }
   if (path.includes("/step/")) {
     await saveStep(req.headers['authorization'].split(" ")[1], path)
-    return  
+    return "api/v1/onboarding/credit-request/step"  
   }
   if (path.includes("api/v1/onboarding/credit-files")) {
     if(req.method == "POST"){
@@ -46,6 +46,35 @@ const GenerateUrl = async (path, req) =>{
       return path + resource
     }
   }
+  if (path.includes("api/v1/onboarding/documents")) {
+    const resource = await validateSignStep(req.headers['authorization'].split(" ")[1])
+    return path + resource
+  }
+  if (path.includes("api/v1/onboarding/next_steps")) {
+      const resource = await validateSignStep(req.headers['authorization'].split(" ")[1])
+      if(!resource){
+        const step = "validation_email"
+        await saveSignStep(req.headers['authorization'].split(" ")[1], step)
+        return path
+      }else{
+        return path + resource
+      }
+    }
+  //   if(("step" in req.body)){
+  //     const resource = await validateSignStep(req.headers['authorization'].split(" ")[1])
+  //     if(resource){
+
+  //     }
+  //     const step = "validation_email"
+  //     await saveSignStep(req.headers['authorization'].split(" ")[1], step)
+  //     return path + "/" + step
+  //   } 
+  //   if(req.body.step === null){
+  //     return path
+  //   }else{
+  //     return path + "/" + req.body.step
+  //   }
+  // }
   return path
 }
 
