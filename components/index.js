@@ -1,6 +1,6 @@
 import { logic } from "./sign.js";
 import { generateToken } from "./login.js";
-import { validateStep, saveStep } from './onboarding.js'
+import { validateStep, saveStep, saveUploadState, validateUploadState} from './onboarding.js'
 
 const ValidateComponent = (path, response) => {
 
@@ -25,7 +25,6 @@ const GenerateUrl = async (path, req) =>{
   }
   if (path == "api/v1/onboarding/credit-request?item_per_page=100&page=1&order=ASC") {
     const resource = await validateStep(req.headers['authorization'].split(" ")[1])
-    console.log(path + resource);
     return path + resource
   }
   if (path == "api/v1/payment_plan") {
@@ -36,7 +35,16 @@ const GenerateUrl = async (path, req) =>{
   }
   if (path.includes("/step/")) {
     await saveStep(req.headers['authorization'].split(" ")[1], path)
-    return "api/v1/onboarding/credit-request/step"
+    return  
+  }
+  if (path.includes("api/v1/onboarding/credit-files")) {
+    if(req.method == "POST"){
+      await saveUploadState(req.headers['authorization'].split(" ")[1])
+      return path
+    }else if(req.method == "GET"){
+      const resource = await validateUploadState(req.headers['authorization'].split(" ")[1])
+      return path + resource
+    }
   }
   return path
 }

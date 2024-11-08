@@ -15,4 +15,17 @@ const saveStep = async (token, path) => {
     await updateData(token, {"step": step})
 }
 
-export {validateStep, saveStep}
+const saveUploadState = async (token) => {
+    await updateData(token, {"upload_document": true})
+}
+
+const validateUploadState = async (token) => {
+    const sessionInfo = await getSessionInfo(token)
+    const state = sessionInfo?.upload_document
+    
+    let newPath = state ? `/${state}` : ``
+    return newPath
+}
+
+
+export {validateStep, saveStep, saveUploadState, validateUploadState}
