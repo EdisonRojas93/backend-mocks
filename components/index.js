@@ -48,18 +48,37 @@ const GenerateUrl = async (path, req) =>{
   }
   if (path.includes("api/v1/onboarding/documents")) {
     const resource = await validateSignStep(req.headers['authorization'].split(" ")[1])
-    return path + resource
+    return resource ? path + "/" + resource : path
+
   }
   if (path.includes("api/v1/onboarding/next_steps")) {
-      const resource = await validateSignStep(req.headers['authorization'].split(" ")[1])
+      let resource = await validateSignStep(req.headers['authorization'].split(" ")[1])
       if(!resource){
-        const step = "validation_email"
-        await saveSignStep(req.headers['authorization'].split(" ")[1], step)
+        await saveSignStep(req.headers['authorization'].split(" ")[1], 1)
         return path
       }else{
-        return path + resource
+       await saveSignStep(req.headers['authorization'].split(" ")[1], resource+1);
+       return resource ? path + "/" + resource : path
+        // switch(resource.split("/")[1]) {
+        //   case "validation_generate_email":
+        //     await saveSignStep(req.headers['authorization'].split(" ")[1], "validation_email");
+        //     //resource = "/validation_sms"
+        //     break;
+        //   case "validation_email":
+        //       await saveSignStep(req.headers['authorization'].split(" ")[1], "validation_generate_sms");
+        //       //resource = "/validation_sms"
+        //       break;
+        //   case "validation_generate_sms":
+        //     await saveSignStep(req.headers['authorization'].split(" ")[1], "validation_sms");
+        //     //resource = "/sign"
+        //     case "validation_sms":
+        //       await saveSignStep(req.headers['authorization'].split(" ")[1], "sign");
+        //       //resource = "/sign"
+        // }
+        // console.log("\nPath:",path + resource);
+        
       }
-    }
+  }
   //   if(("step" in req.body)){
   //     const resource = await validateSignStep(req.headers['authorization'].split(" ")[1])
   //     if(resource){

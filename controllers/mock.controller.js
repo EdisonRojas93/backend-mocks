@@ -5,6 +5,7 @@ const getData = async (req, res) => {
   const path = req.originalUrl.substring(1);
   
   const newPath = await GenerateUrl(path, req);
+  console.log("\n",newPath);
   try {
     const db = await connectDB();
     const collection = db.collection("endpoints");

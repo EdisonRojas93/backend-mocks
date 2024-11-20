@@ -35,7 +35,7 @@ const validateSignStep = async (token) => {
     const sessionInfo = await getSessionInfo(token)
     const step = sessionInfo?.sign_step
     
-    let newPath = step ? `/${step}` : ``
+    let newPath = step ? step : ``
     return newPath
 }
 
